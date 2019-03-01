@@ -61,25 +61,28 @@ export default class TableGrid extends React.Component {
       }
     }
     
-    getPaginatedData(data, paginateBy, paginationSide) {
+    getPaginatedData(data, paginateBy, paginationSide, page) {
       const { currentPage } = this.state;
+      page = page >= 0 ? page : currentPage;
       
       if (paginationSide === 'backend') {
           return data;
       }
       
-      return data.slice(currentPage * paginateBy, (currentPage + 1) * paginateBy);
+      return data.slice(page * paginateBy, (page + 1) * paginateBy);
     }
     
     handlePageChange(page, paginateBy, paginationSide) {
-        if (this.props.onPageChange) {
-            this.props.onPageChange(page.selected + 1);
-        }
+      const chosenPage = page.selected || 0;
+      
+      if (this.props.onPageChange) {
+          this.props.onPageChange(page.selected + 1);
+      }
 
-        this.setState({
-          currentPage: page.selected || 0,
-          paginatedData: this.getPaginatedData(this.state.data, paginateBy, paginationSide),
-        });
+      this.setState({
+        currentPage: chosenPage,
+        paginatedData: this.getPaginatedData(this.state.data, paginateBy, paginationSide, chosenPage),
+      });
     }
     
     renderPagination(paginateBy, paginationSide, itemsCount, initialPage, forcePage) {
@@ -116,6 +119,7 @@ export default class TableGrid extends React.Component {
     
     renderBody(data, path, colLength, columns) {
       let rows = [];
+      
       data.forEach((row, rowIdx) => {
         const hasKids = this.hasKids(row);
         
