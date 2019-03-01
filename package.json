@@ -1,8 +1,8 @@
 {
-  "name": "react-grid-table",
+  "name": "react-table-grid",
   "version": "1.0.0",
   "description": "external library",
-  "author": "Mikhe",
+  "author": "mikhe",
   "license": "MIT",
   "repository": {
     "type": "git",
