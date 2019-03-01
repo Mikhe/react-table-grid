@@ -11,6 +11,8 @@ export default class TableGrid extends React.Component {
         this.state = {
           data: this.props.data,
         }
+        
+        this.renderBody = this.renderBody.bind(this);
     }
     
     getColumns(data) {
@@ -46,75 +48,81 @@ export default class TableGrid extends React.Component {
       }
     }
     
+    renderBody(data, path, colLength, columns) {
+      let rows = [];
+      data.forEach((row, rowIdx) => {
+        const hasKids = this.hasKids(row);
+        
+        rows.push(
+          <tr key={`row-column-${rowIdx}`}>
+              {columns.map((column, idx) => {
+                  const theFistWithChildren = hasKids && idx === 0;
+                  const dataClassName = idx === 0 ? 'first-column-data' : '';
+                  
+                  return <td key={`cell-column-${rowIdx}-${idx}`}>
+                      {/* collapse button */}
+                      {theFistWithChildren &&
+                          <div className="collapse-button-wrap"> 
+                              <CollapseButton collapsed={row.collapsed}
+                                  onClick={() => {
+                                      this.collapseRow(path, rowIdx);
+                                  }}
+                              />
+                          </div>
+                      }
+                      <div className={dataClassName}>
+                          {row.data[column]}
+                      </div>
+                  </td>
+              })}
+          </tr>
+        );
+                
+        if (hasKids && row.collapsed) {
+          Object.keys(row.kids).forEach((kid, kidIdx) => {
+              const nextPath = `${path}${rowIdx}.kids.${kid}.records.`;
+              
+              rows.push(
+                  <tr key={`table-column-${kidIdx}`}>
+                      <td colSpan={colLength} className="child-table-td">
+                          <div className='title'>
+                              {kid}
+                          </div>
+                          <TableGrid 
+                              data={row.kids[kid].records}
+                              path={nextPath}
+                              collapseRow={this.props.collapseRow}/>
+                      </td>
+                  </tr>
+              )
+          })
+        }
+      })
+      
+      return (
+        <tbody>
+          {rows}
+        </tbody>
+      )
+    }
+    
     render() {
         const { data } = this.state;
         const columns = this.getColumns(data);
         const colLength = columns.length;
         const path = this.props.path ? this.props.path : '';
         
-        return data.length ?
+        return (
             <table className="custom-table">
-                <thead>
-                    <tr>
-                        {columns.map((column, idx) => {
-                            return <th key={`header-column-${idx}`}>{column}</th>
-                        })}
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((row, rowIdx) => {
-                        const hasKids = this.hasKids(row);
-                        
-                        return (
-                            <React.Fragment key={`parent-row-${rowIdx}`}>
-                                <tr>
-                                    {columns.map((column, idx) => {
-                                        const theFistWithChildren = hasKids && idx === 0;
-                                        const dataClassName = idx === 0 ? 'first-column-data' : '';
-                                        
-                                        return <td key={`cell-column-${rowIdx}-${idx}`}>
-                                            {/* collapse button */}
-                                            {theFistWithChildren &&
-                                                <div className="collapse-button-wrap"> 
-                                                    <CollapseButton collapsed={row.collapsed}
-                                                        onClick={() => {
-                                                            this.collapseRow(path, rowIdx);
-                                                        }}
-                                                    />
-                                                </div>
-                                            }
-                                            <div className={dataClassName}>
-                                                {row.data[column]}
-                                            </div>
-                                        </td>
-                                    })}
-                                </tr>
-                                
-                                {hasKids && row.collapsed &&
-                                    Object.keys(row.kids).map((kid, kidIdx) => {
-                                        const nextPath = `${path}${rowIdx}.kids.${kid}.records.`;
-                                        
-                                        return (
-                                            <tr key={`table-column-${kid}-${kidIdx}`}>
-                                                <td colSpan={colLength} className="child-table-td">
-                                                    <div className='title'>
-                                                        {kid}
-                                                    </div>
-                                                    <TableGrid 
-                                                        data={row.kids[kid].records}
-                                                        path={nextPath}
-                                                        removeRow={this.props.removeRow}
-                                                        collapseRow={this.props.collapseRow}/>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-                            </React.Fragment>
-                        )
-                    })}
-                </tbody>
-            </table>
-        : ''
+              <thead>
+                  <tr>
+                      {columns.map((column, idx) => {
+                          return <th key={`header-column-${idx}`}>{column}</th>
+                      })}
+                  </tr>
+              </thead>
+              {this.renderBody(data, path, colLength, columns)}                    
+          </table>
+        )
     };
 };
