@@ -1,0 +1,8 @@
+{
+  "short_name": "react-grid-table",
+  "name": "react-grid-table",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
