@@ -1,12 +1,12 @@
 {
-  "name": "react-grid-table",
+  "name": "react-table-grid",
   "version": "1.0.0",
   "description": "external library",
   "author": "mikhe",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mikhe/test-lib.git"
+    "url": "https://github.com/Mikhe/react-table-grid.git"
   },
   "main": "dist/index.js",
   "module": "dist/index.es.js",
