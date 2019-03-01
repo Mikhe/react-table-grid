@@ -20,6 +20,7 @@ export default class TableGrid extends React.Component {
         this.renderPagination = this.renderPagination.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
         this.getPaginatedData = this.getPaginatedData.bind(this);
+        this.renderColumn = this.renderColumn.bind(this);
     }
     
     componentWillMount() {
@@ -128,6 +129,16 @@ export default class TableGrid extends React.Component {
         return '';
     }
     
+    renderColumn(name, value) {
+      const { renderColumns } = this.props;
+      
+      if (renderColumns && renderColumns[name]) {
+        return renderColumns[name](value);
+      }
+      
+      return value;
+    }
+    
     renderBody(data, path, colLength, columns) {
       let rows = [];
       
@@ -152,7 +163,7 @@ export default class TableGrid extends React.Component {
                           </div>
                       }
                       <div className={dataClassName}>
-                          {row.data[column]}
+                          {this.renderColumn(column, row.data[column])}
                       </div>
                   </td>
               })}
