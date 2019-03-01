@@ -1,13 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react';
+import TableGrid from 'react-grid-table';
+import data from './data';
 
-import ExampleComponent from 'react-grid-table'
-
-export default class App extends Component {
-  render () {
-    return (
-      <div>
-        <ExampleComponent text='Modern React component module' />
-      </div>
-    )
-  }
+export default class App extends React.Component {
+    render() {
+        return <div className="container">
+            <TableGrid 
+              data={data}/>
+        </div>
+    }
 }

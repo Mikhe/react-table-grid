@@ -1,7 +1,7 @@
-import ExampleComponent from './'
+import TableGrid from './TableGrid';
 
 describe('ExampleComponent', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(TableGrid).toBeTruthy()
   })
 })
