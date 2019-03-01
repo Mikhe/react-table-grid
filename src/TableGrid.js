@@ -26,7 +26,10 @@ export default class TableGrid extends React.Component {
       const { paginateBy, paginationSide, forcePage } = this.props;
       
       if (paginateBy) {
-        this.handlePageChange({selected: forcePage || 0}, paginateBy, paginationSide);
+        this.setState({
+          currentPage: forcePage || 0,
+          paginatedData: this.getPaginatedData(this.state.data, paginateBy, paginationSide, forcePage || 0),
+        });
       }
     }
     
