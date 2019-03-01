@@ -5,7 +5,8 @@ import data from './data';
 export default class App extends React.Component {
     render() {
         return <div className="container">
-            <TableGrid 
+            <TableGrid
+              paginateBy={5}
               data={data}/>
         </div>
     }

@@ -1,6 +1,7 @@
 import * as React from 'react';
-import objectAssign from 'object-assign';
+import ReactPaginate from 'react-paginate';
 import dotProp from 'dot-prop-immutable';
+import objectAssign from 'object-assign';
 
 import CollapseButton from './components/CollapseButton';
 
@@ -10,9 +11,15 @@ export default class TableGrid extends React.Component {
         
         this.state = {
           data: this.props.data,
+          paginatedData: [],
+          currentPage: props.initialPage ? props.initialPage - 1 : 0,
         }
         
         this.renderBody = this.renderBody.bind(this);
+        this.collapseRow = this.collapseRow.bind(this);
+        this.renderPagination = this.renderPagination.bind(this);
+        this.handlePageChange = this.handlePageChange.bind(this);
+        this.getPaginatedData = this.getPaginatedData.bind(this);
     }
     
     getColumns(data) {
@@ -44,8 +51,67 @@ export default class TableGrid extends React.Component {
       if (this.props.collapseRow) {
         this.props.collapseRow(path, idx);
       } else {
-        this.setState(dotProp.toggle(this.state, `data.${idx}.collapsed`));
+        const state = this.state;
+        
+        if (this.props.paginateBy) {
+          this.setState(dotProp.toggle(state, `paginatedData.${idx}.collapsed`));
+        } else {
+          this.setState(dotProp.toggle(state, `data.${idx}.collapsed`));
+        }
       }
+    }
+    
+    getPaginatedData(data, paginateBy, paginationSide) {
+      const { currentPage } = this.state;
+      
+      if (paginationSide === 'backend') {
+          return data;
+      }
+      
+      return data.slice(currentPage * paginateBy, (currentPage + 1) * paginateBy);
+    }
+    
+    handlePageChange(page, paginateBy, paginationSide) {
+        if (this.props.onPageChange) {
+            this.props.onPageChange(page.selected + 1);
+        }
+
+        this.setState({
+          currentPage: page.selected || 0,
+          paginatedData: this.getPaginatedData(this.state.data, paginateBy, paginationSide),
+        });
+    }
+    
+    renderPagination(paginateBy, paginationSide, itemsCount, initialPage, forcePage) {
+        const {currentPage, data} = this.state;
+        let pageCount = 0;
+
+        if (paginationSide && paginationSide === 'backend') {
+            pageCount = itemsCount % paginateBy === 0
+                ? itemsCount / paginateBy : parseInt(itemsCount / paginateBy) + 1;
+        } else {
+            pageCount = data.length % paginateBy === 0
+                ? data.length / paginateBy : parseInt(data.length / paginateBy) + 1;
+        }
+
+        if (pageCount > 1) {
+          return (
+            <ReactPaginate previousLabel="prev"
+             nextLabel="next"
+             breakLabel="..."
+             initialPage={initialPage}
+             forcePage={paginationSide === 'backend' ? forcePage : currentPage}
+             pageCount={pageCount}
+             marginPagesDisplayed={2}
+             pageRangeDisplayed={5}
+             disableInitialCallback={paginationSide === 'backend'}
+             onPageChange={page => this.handlePageChange(page, paginateBy, paginationSide)}
+             containerClassName="pagination"
+             subContainerClassName="pages pagination"
+             activeClassName="active"/>
+           );
+        }
+        return '';
     }
     
     renderBody(data, path, colLength, columns) {
@@ -108,21 +174,38 @@ export default class TableGrid extends React.Component {
     
     render() {
         const { data } = this.state;
-        const columns = this.getColumns(data);
+        const { paginateBy, itemsCount, page, forcePage, } = this.props;
+        
+        let paginatedData;
+
+        if (paginateBy) {
+            paginatedData = this.state.paginatedData;
+        } else {
+            paginatedData = data;
+        }
+        
+        const columns = this.getColumns(paginatedData);
         const colLength = columns.length;
         const path = this.props.path ? this.props.path : '';
+        const paginationSide = this.props.paginationSide ? this.props.paginationSide : 'client';
         
         return (
+          <div className="custom-table-wrap">
             <table className="custom-table">
-              <thead>
-                  <tr>
-                      {columns.map((column, idx) => {
-                          return <th key={`header-column-${idx}`}>{column}</th>
-                      })}
-                  </tr>
-              </thead>
-              {this.renderBody(data, path, colLength, columns)}                    
-          </table>
+                <thead>
+                    <tr>
+                        {columns.map((column, idx) => {
+                            return <th key={`header-column-${idx}`}>{column}</th>
+                        })}
+                    </tr>
+                </thead>
+                {this.renderBody(paginatedData, path, colLength, columns)}                    
+            </table>
+            {paginateBy &&
+                <div className="text-center">
+                    {this.renderPagination(paginateBy, paginationSide, itemsCount, page - 1, forcePage - 1)}
+                </div>}
+          </div>
         )
     };
 };
