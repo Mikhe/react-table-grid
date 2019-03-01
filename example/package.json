@@ -1,6 +1,6 @@
 {
-  "name": "react-grid-table-example",
-  "homepage": "https://Mikhe.github.io/react-grid-table",
+  "name": "react-table-grid-example",
+  "homepage": "https://Mikhe.github.io/react-table-grid",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
@@ -8,7 +8,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-grid-table": "file:..",
+    "react-table-grid": "file:..",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^1.1.4"
   },
