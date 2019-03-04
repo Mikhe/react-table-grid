@@ -12,6 +12,7 @@ export default class App extends React.Component {
             <TableGrid
               renderChildTitle={false}
               renderChildHeaders={false}
+              className="custom-table"
               paginateBy={5}
               data={data}/>
         </div>

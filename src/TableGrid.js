@@ -216,7 +216,7 @@ export default class TableGrid extends React.Component {
     
     render() {
         const { data, renderChildHeaders } = this.state;
-        const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, } = this.props;
+        const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, className, } = this.props;
         
         let paginatedData;
 
@@ -232,8 +232,8 @@ export default class TableGrid extends React.Component {
         const paginationSide = this.props.paginationSide ? this.props.paginationSide : 'client';
         
         return (
-          <div className="custom-table-wrap">
-            <table className="custom-table">
+          <div className={`${className ? className : 'custom-table'}-wrap`}>
+            <table className={`${className ? className : 'custom-table'}`}>
                 {!(isChild && !renderChildHeaders) &&
                   <thead>
                       <tr>
