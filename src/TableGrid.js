@@ -97,7 +97,7 @@ export default class TableGrid extends React.Component {
       const chosenPage = page.selected || 0;
       
       if (this.props.onPageChange) {
-          this.props.onPageChange(page.selected + 1);
+          this.props.onPageChange(chosenPage + 1);
       }
 
       this.setState({
