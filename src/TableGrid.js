@@ -149,7 +149,7 @@ export default class TableGrid extends React.Component {
     }
     
     renderBody(data, path, colLength, columns) {
-      const { renderColumns, collapseRow, } = this.props;
+      const { renderColumns, collapseRow, className, } = this.props;
       const { renderChildTitle, renderChildHeaders, } = this.state;
       let rows = [];
       
@@ -196,6 +196,7 @@ export default class TableGrid extends React.Component {
                             isChild={true}  
                             data={row.kids[kid].records}
                             path={nextPath}
+                            className={className}
                             renderChildTitle={renderChildTitle}
                             renderChildHeaders={renderChildHeaders}
                             renderColumns={renderColumns}
