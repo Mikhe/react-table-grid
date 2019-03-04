@@ -147,6 +147,7 @@ export default class TableGrid extends React.Component {
     }
     
     renderBody(data, path, colLength, columns) {
+      const { renderColumns, collapseRow } = this.props;
       let rows = [];
       
       data.forEach((row, rowIdx) => {
@@ -157,8 +158,9 @@ export default class TableGrid extends React.Component {
               {columns.map((column, idx) => {
                   const theFistWithChildren = hasKids && idx === 0;
                   const dataClassName = idx === 0 ? 'first-column-data' : '';
+                  const className = `${renderColumns && renderColumns[column] && renderColumns[column].className || ''} ${column}` ;
                   
-                  return <td key={`cell-column-${rowIdx}-${idx}`}>
+                  return <td key={`cell-column-${rowIdx}-${idx}`} className={className}>
                       {/* collapse button */}
                       {theFistWithChildren &&
                           <div className="collapse-button-wrap"> 
@@ -190,8 +192,8 @@ export default class TableGrid extends React.Component {
                           <TableGrid 
                               data={row.kids[kid].records}
                               path={nextPath}
-                              renderColumns={this.props.renderColumns}
-                              collapseRow={this.props.collapseRow}/>
+                              renderColumns={renderColumns}
+                              collapseRow={collapseRow}/>
                       </td>
                   </tr>
               )
