@@ -139,8 +139,8 @@ export default class TableGrid extends React.Component {
     renderColumn(name, value) {
       const { renderColumns } = this.props;
       
-      if (renderColumns && renderColumns[name]) {
-        return renderColumns[name](value);
+      if (renderColumns && renderColumns[name] && renderColumns[name].value && renderColumns[name].value.call) {
+        return renderColumns[name].value(value);
       }
       
       return value;
@@ -208,7 +208,7 @@ export default class TableGrid extends React.Component {
     
     render() {
         const { data } = this.state;
-        const { paginateBy, itemsCount, page, forcePage, } = this.props;
+        const { paginateBy, itemsCount, page, forcePage, renderColumns, } = this.props;
         
         let paginatedData;
 
@@ -229,7 +229,8 @@ export default class TableGrid extends React.Component {
                 <thead>
                     <tr>
                         {columns.map((column, idx) => {
-                            return <th key={`header-column-${idx}`}>{column}</th>
+                          const name = renderColumns && renderColumns[column].name || column;
+                          return <th key={`header-column-${idx}`}>{name}</th>
                         })}
                     </tr>
                 </thead>
