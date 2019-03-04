@@ -13,6 +13,8 @@ export default class TableGrid extends React.Component {
           data: this.props.data,
           paginatedData: [],
           currentPage: props.initialPage ? props.initialPage - 1 : 0,
+          renderChildTitle: typeof this.props.renderChildTitle === "boolean" ? this.props.renderChildTitle : true,
+          renderChildHeaders: typeof this.props.renderChildHeaders === "boolean" ? this.props.renderChildTitle : true,
         }
         
         this.renderBody = this.renderBody.bind(this);
@@ -147,7 +149,8 @@ export default class TableGrid extends React.Component {
     }
     
     renderBody(data, path, colLength, columns) {
-      const { renderColumns, collapseRow } = this.props;
+      const { renderColumns, collapseRow, } = this.props;
+      const { renderChildTitle, renderChildHeaders, } = this.state;
       let rows = [];
       
       data.forEach((row, rowIdx) => {
@@ -186,14 +189,17 @@ export default class TableGrid extends React.Component {
               rows.push(
                   <tr key={`table-column-${kidIdx}`}>
                       <td colSpan={colLength} className="child-table-td">
-                          <div className='title'>
+                          {renderChildTitle && <div className='title'>
                               {kid}
-                          </div>
+                          </div>}
                           <TableGrid 
-                              data={row.kids[kid].records}
-                              path={nextPath}
-                              renderColumns={renderColumns}
-                              collapseRow={collapseRow}/>
+                            isChild={true}  
+                            data={row.kids[kid].records}
+                            path={nextPath}
+                            renderChildTitle={renderChildTitle}
+                            renderChildHeaders={renderChildHeaders}
+                            renderColumns={renderColumns}
+                            collapseRow={collapseRow}/>
                       </td>
                   </tr>
               )
@@ -209,8 +215,8 @@ export default class TableGrid extends React.Component {
     }
     
     render() {
-        const { data } = this.state;
-        const { paginateBy, itemsCount, page, forcePage, renderColumns, } = this.props;
+        const { data, renderChildHeaders } = this.state;
+        const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, } = this.props;
         
         let paginatedData;
 
@@ -228,14 +234,16 @@ export default class TableGrid extends React.Component {
         return (
           <div className="custom-table-wrap">
             <table className="custom-table">
-                <thead>
-                    <tr>
-                        {columns.map((column, idx) => {
-                          const name = renderColumns && renderColumns[column].name || column;
-                          return <th key={`header-column-${idx}`}>{name}</th>
-                        })}
-                    </tr>
-                </thead>
+                {!(isChild && !renderChildHeaders) &&
+                  <thead>
+                      <tr>
+                          {columns.map((column, idx) => {
+                            const name = renderColumns && renderColumns[column].name || column;
+                            return <th key={`header-column-${idx}`}>{name}</th>
+                          })}
+                      </tr>
+                  </thead>
+                }
                 {this.renderBody(paginatedData, path, colLength, columns)}                    
             </table>
             {paginateBy &&
