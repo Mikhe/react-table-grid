@@ -16,6 +16,7 @@ export default class TableGrid extends React.Component {
         }
         
         this.renderBody = this.renderBody.bind(this);
+        this.getColumns = this.getColumns.bind(this);
         this.collapseRow = this.collapseRow.bind(this);
         this.renderPagination = this.renderPagination.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
@@ -35,15 +36,21 @@ export default class TableGrid extends React.Component {
     }
     
     getColumns(data) {
-        let columns = {};
-        
-        data.forEach(row => {
-            objectAssign(columns, row.data);
-        });
-        
-        columns = Object.keys(columns);
-        
-        return columns;
+      const { renderColumns } = this.props;
+      
+      if (renderColumns) {
+        return Object.keys(renderColumns);
+      }
+      
+      let columns = {};
+      
+      data.forEach(row => {
+          objectAssign(columns, row.data);
+      });
+      
+      columns = Object.keys(columns);
+      
+      return columns;
     }
     
     hasKids(data) {
@@ -183,6 +190,7 @@ export default class TableGrid extends React.Component {
                           <TableGrid 
                               data={row.kids[kid].records}
                               path={nextPath}
+                              renderColumns={this.props.renderColumns}
                               collapseRow={this.props.collapseRow}/>
                       </td>
                   </tr>

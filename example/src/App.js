@@ -10,9 +10,6 @@ export default class App extends React.Component {
     render() {
         return <div className="container">
             <TableGrid
-              renderColumns={{
-                "Name": this.renderName,
-              }}
               paginateBy={5}
               data={data}/>
         </div>
