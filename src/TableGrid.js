@@ -217,19 +217,21 @@ export default class TableGrid extends React.Component {
     render() {
         const { data, renderChildHeaders } = this.state;
         const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, className, } = this.props;
+        const paginationSide = this.props.paginationSide ? this.props.paginationSide : 'client';
         
         let paginatedData;
 
-        if (paginateBy) {
-            paginatedData = this.state.paginatedData;
+        if (paginationSide === 'backend') {
+          paginatedData = this.props.data;
+        } else if (!paginateBy) {
+          paginatedData = data
         } else {
-            paginatedData = data;
+          paginatedData = this.state.paginatedData;
         }
         
         const columns = this.getColumns(paginatedData);
         const colLength = columns.length;
         const path = this.props.path ? this.props.path : '';
-        const paginationSide = this.props.paginationSide ? this.props.paginationSide : 'client';
         
         return (
           <div className={`${className ? className : 'custom-table'}-wrap`}>
