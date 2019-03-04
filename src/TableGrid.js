@@ -138,11 +138,11 @@ export default class TableGrid extends React.Component {
         return '';
     }
     
-    renderColumn(name, value, idx, id) {
+    renderColumn(name, value, idx, row) {
       const { renderColumns } = this.props;
       
       if (renderColumns && renderColumns[name] && renderColumns[name].value && renderColumns[name].value.call) {
-        return renderColumns[name].value(value, idx, id);
+        return renderColumns[name].value(value, idx, row);
       }
       
       return value;
@@ -175,7 +175,7 @@ export default class TableGrid extends React.Component {
                           </div>
                       }
                       <div className={dataClassName}>
-                          {this.renderColumn(column, row.data[column], rowIdx, row.data.id)}
+                          {this.renderColumn(column, row.data[column], rowIdx, row.data)}
                       </div>
                   </td>
               })}
