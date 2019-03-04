@@ -187,7 +187,7 @@ export default class TableGrid extends React.Component {
               const nextPath = `${path}${rowIdx}.kids.${kid}.records.`;
               
               rows.push(
-                  <tr key={`table-column-${kidIdx}`}>
+                  <tr key={`table-column-${rowIdx}-${kidIdx}`}>
                       <td colSpan={colLength} className="child-table-td">
                           {renderChildTitle && <div className='title'>
                               {kid}
