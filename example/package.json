@@ -8,9 +8,9 @@
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-table-grid": "file:..",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^1.1.4"
+    "react-scripts": "^1.1.4",
+    "react-table-grid": "file:.."
   },
   "scripts": {
     "start": "react-scripts start",

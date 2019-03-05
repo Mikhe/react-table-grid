@@ -227,7 +227,7 @@ export default class TableGrid extends React.Component {
     
     render() {
         const { data, renderChildHeaders } = this.state;
-        const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, className, } = this.props;
+        const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, className, loading, } = this.props;
         const paginationSide = this.props.paginationSide ? this.props.paginationSide : 'client';
         
         let paginatedData;
@@ -246,23 +246,26 @@ export default class TableGrid extends React.Component {
         
         return (
           <div className={`${className ? className : 'custom-table'}-wrap`}>
-            <table className={`${className ? className : 'custom-table'}`}>
-                {!(isChild && !renderChildHeaders) &&
-                  <thead>
-                      <tr>
-                          {columns.map((column, idx) => {
-                            const name = renderColumns && renderColumns[column].name || column;
-                            return <th key={`header-column-${idx}`}>{name}</th>
-                          })}
-                      </tr>
-                  </thead>
-                }
-                {this.renderBody(paginatedData, path, colLength, columns)}                    
-            </table>
-            {paginateBy &&
-                <div className="text-center">
-                    {this.renderPagination(paginateBy, paginationSide, itemsCount, page - 1, forcePage - 1)}
-                </div>}
+            { loading ? loading :
+              <table className={`${className ? className : 'custom-table'}`}>
+                  {!(isChild && !renderChildHeaders) &&
+                    <thead>
+                        <tr>
+                            {columns.map((column, idx) => {
+                              const name = renderColumns && renderColumns[column].name || column;
+                              return <th key={`header-column-${idx}`}>{name}</th>
+                            })}
+                        </tr>
+                    </thead>
+                  }
+                  {this.renderBody(paginatedData, path, colLength, columns)}                    
+              </table>
+            }
+            {paginateBy && !loading &&
+              <div className="text-center">
+                  {this.renderPagination(paginateBy, paginationSide, itemsCount, page - 1, forcePage - 1)}
+              </div>
+            }
           </div>
         )
     };
