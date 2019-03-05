@@ -258,7 +258,7 @@ export default class TableGrid extends React.Component {
                   </thead>
                 }
                 {loading ?
-                  <tbody><tr><td>{loading}</td></tr></tbody>
+                  <tbody><tr><td colSpan={999}>{loading}</td></tr></tbody>
                   : this.renderBody(paginatedData, path, colLength, columns)
                 }                    
             </table>
