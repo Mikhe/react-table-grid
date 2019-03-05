@@ -159,7 +159,7 @@ export default class TableGrid extends React.Component {
     }
     
     renderBody(data, path, colLength, columns) {
-      const { renderColumns, collapseRow, className, } = this.props;
+      const { renderColumns, collapseRow, className, loading, loader, } = this.props;
       const { renderChildTitle, renderChildHeaders, } = this.state;
       let rows = [];
       
@@ -203,7 +203,9 @@ export default class TableGrid extends React.Component {
                               {kid}
                           </div>}
                           <TableGrid 
-                            isChild={true}  
+                            isChild={true}
+                            loading={row.kids[kid].isLoading}
+                            loader={loader}
                             data={row.kids[kid].records}
                             path={nextPath}
                             className={className}
@@ -227,7 +229,7 @@ export default class TableGrid extends React.Component {
     
     render() {
         const { data, renderChildHeaders } = this.state;
-        const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, className, loading, } = this.props;
+        const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, className, loading, loader, } = this.props;
         const paginationSide = this.props.paginationSide ? this.props.paginationSide : 'client';
         
         let paginatedData;
@@ -259,7 +261,7 @@ export default class TableGrid extends React.Component {
                   </thead>
                 }
                 {loading ?
-                  <tbody><tr><td colSpan={999}>{loading}</td></tr></tbody>
+                  <tbody><tr><td colSpan={999}>{loader}</td></tr></tbody>
                   : this.renderBody(paginatedData, path, colLength, columns)
                 }                    
             </table>
