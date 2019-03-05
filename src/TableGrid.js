@@ -246,21 +246,22 @@ export default class TableGrid extends React.Component {
         
         return (
           <div className={`${className ? className : 'custom-table'}-wrap`}>
-            { loading ? loading :
-              <table className={`${className ? className : 'custom-table'}`}>
-                  {!(isChild && !renderChildHeaders) &&
-                    <thead>
-                        <tr>
-                            {columns.map((column, idx) => {
-                              const name = renderColumns && renderColumns[column].name || column;
-                              return <th key={`header-column-${idx}`}>{name}</th>
-                            })}
-                        </tr>
-                    </thead>
-                  }
-                  {this.renderBody(paginatedData, path, colLength, columns)}                    
-              </table>
-            }
+            <table className={`${className ? className : 'custom-table'}`}>
+                {!(isChild && !renderChildHeaders) && (!loading || renderColumns) &&
+                  <thead>
+                      <tr>
+                          {columns.map((column, idx) => {
+                            const name = renderColumns && renderColumns[column].name || column;
+                            return <th key={`header-column-${idx}`}>{name}</th>
+                          })}
+                      </tr>
+                  </thead>
+                }
+                {loading ?
+                  <tbody><tr><td>{loading}</td></tr></tbody>
+                  : this.renderBody(paginatedData, path, colLength, columns)
+                }                    
+            </table>
             {paginateBy && !loading &&
               <div className="text-center">
                   {this.renderPagination(paginateBy, paginationSide, itemsCount, page - 1, forcePage - 1)}
