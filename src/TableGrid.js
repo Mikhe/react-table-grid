@@ -26,6 +26,16 @@ export default class TableGrid extends React.Component {
         this.renderColumn = this.renderColumn.bind(this);
     }
     
+    componentDidUpdate(prevProps){
+      const { data, paginateBy } = this.props;
+      
+      if (!paginateBy && JSON.stringify(data) !== JSON.stringify(prevProps.data)) {
+        this.setState({
+          data: data,
+        })
+      }
+    }
+    
     componentWillMount() {
       const { paginateBy, paginationSide, forcePage } = this.props;
       
