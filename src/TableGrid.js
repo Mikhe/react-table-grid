@@ -252,7 +252,8 @@ export default class TableGrid extends React.Component {
                       <tr>
                           {columns.map((column, idx) => {
                             const name = renderColumns && renderColumns[column].name || column;
-                            return <th key={`header-column-${idx}`}>{name}</th>
+                            const className = `${renderColumns && renderColumns[column] && renderColumns[column].className || ''} ${column}` ;
+                            return <th key={`header-column-${idx}`} className={className}>{name}</th>
                           })}
                       </tr>
                   </thead>
