@@ -8,7 +8,7 @@ export default class CollapseButton extends React.PureComponent {
                 onClick={() => {
                     this.props.onClick();
                 }}>
-                    &#17;
+                    &#9666;
             </button>
     }
 }
