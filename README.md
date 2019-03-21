@@ -54,6 +54,7 @@ Common props you may want to specify include:
 * `renderChildTitle` - to render a title for child tables
 * `renderChildHeaders` - to render column headers for child tables
 * `collapseRow` - subscribe to collapse events
+* `NoDataMessage` - anything to show in case data absence
 
 ** pagination props according to https://github.com/AdeleD/react-paginate#readme
 
