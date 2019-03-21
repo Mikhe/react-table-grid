@@ -158,7 +158,7 @@ export default class TableGrid extends React.Component {
       return value;
     }
     
-    renderBody(data, path, colLength, columns) {
+    renderBody(data, path, columns) {
       const { renderColumns, collapseRow, className, loading, loader, } = this.props;
       const { renderChildTitle, renderChildHeaders, } = this.state;
       let rows = [];
@@ -198,7 +198,7 @@ export default class TableGrid extends React.Component {
               
               rows.push(
                   <tr key={`table-column-${rowIdx}-${kidIdx}`}>
-                      <td colSpan={colLength} className="child-table-td">
+                      <td colSpan="100%" className="child-table-td">
                           {renderChildTitle && <div className='title'>
                               {kid}
                           </div>}
@@ -229,7 +229,7 @@ export default class TableGrid extends React.Component {
     
     render() {
         const { data, renderChildHeaders } = this.state;
-        const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, className, loading, loader, } = this.props;
+        const { paginateBy, itemsCount, page, forcePage, renderColumns, isChild, className, loading, loader, NoDataMessage } = this.props;
         const paginationSide = this.props.paginationSide ? this.props.paginationSide : 'client';
         
         let paginatedData;
@@ -243,7 +243,6 @@ export default class TableGrid extends React.Component {
         }
         
         const columns = this.getColumns(paginatedData);
-        const colLength = columns.length;
         const path = this.props.path ? this.props.path : '';
         
         return (
@@ -261,13 +260,15 @@ export default class TableGrid extends React.Component {
                   </thead>
                 }
                 {loading ?
-                  <tbody><tr><td colSpan={999}>{loader}</td></tr></tbody>
-                  : this.renderBody(paginatedData, path, colLength, columns)
+                  <tbody><tr><td colSpan="100%">{loader}</td></tr></tbody>
+                  : data.length ?
+                    this.renderBody(paginatedData, path, columns)
+                    : <tbody><tr><td colSpan="100%">{NoDataMessage || ''}</td></tr></tbody>
                 }                    
             </table>
-            {paginateBy && !loading &&
+            {paginateBy && !loading && 
               <div className="text-center">
-                  {this.renderPagination(paginateBy, paginationSide, itemsCount, page - 1, forcePage - 1)}
+                  {data.length ? this.renderPagination(paginateBy, paginationSide, itemsCount, page - 1, forcePage - 1) : ''}
               </div>
             }
           </div>
