@@ -261,14 +261,14 @@ export default class TableGrid extends React.Component {
                 }
                 {loading ?
                   <tbody><tr><td colSpan="100%">{loader}</td></tr></tbody>
-                  : data.length ?
+                  : paginatedData.length ?
                     this.renderBody(paginatedData, path, columns)
                     : <tbody><tr><td colSpan="100%">{NoDataMessage || ''}</td></tr></tbody>
                 }                    
             </table>
             {paginateBy && !loading && 
               <div className="text-center">
-                  {data.length ? this.renderPagination(paginateBy, paginationSide, itemsCount, page - 1, forcePage - 1) : ''}
+                  {paginatedData.length ? this.renderPagination(paginateBy, paginationSide, itemsCount, page - 1, forcePage - 1) : ''}
               </div>
             }
           </div>
