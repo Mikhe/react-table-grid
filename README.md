@@ -4,6 +4,10 @@
 
 [![NPM](https://img.shields.io/npm/v/react-table-grid.svg)](https://www.npmjs.com/package/react-table-grid) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+## Exampled
+
+https://mikhe.github.io/react-table-grid/
+
 ## Install
 
 ```bash
