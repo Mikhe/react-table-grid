@@ -1,12 +1,8 @@
 import React from 'react';
-import TableGrid from 'react-grid-table';
+import TableGrid from 'react-table-grid';
 import data from './data';
 
 export default class App extends React.Component {
-    renderName(value){
-        return `Name: ${value}`;
-    }
-  
     render() {
         return <div className="container">
             <TableGrid
